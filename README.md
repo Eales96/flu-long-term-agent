@@ -36,8 +36,11 @@ The simulations as performed in `main.py` take approximately 1 hour to complete 
 
 ## Software requirements
 ### OS Requirements
+The code does not rely on any specific operating system and only requires 
 
 ### Python Dependencies
+The code was implemented using `Python 3.11`.
+
 The python scripts have the following dependencies:
 ```
 contourpy==1.0.7
@@ -59,7 +62,9 @@ six==1.16.0
 These are also listed in requirments.txt and can be installed as shown below in the installation guide.
 
 ### R Dependencies
-The figure scipts written in R have the following dependencies:
+The R code was implemented in `R version 4.2.3`.
+
+The scipts written in R have the following dependencies:
 
 # Installation Guide:
 ### Install from Github
