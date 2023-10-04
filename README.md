@@ -21,13 +21,14 @@ The code required to fit to the global drift model to the antigenic data avaialb
 ## Figure scripts
 There are multiple figure scripts located in `flu-long-term-agent/figure_scipts/` which are used to convert the raw output from the python simulations, and the global drift model fit posterior, into figures and values (e.g. correlations, mean yearly attack rate, etc). The figure scipts have some functions defined in `flu-long-term-agent/plot_functions.R` on which they rely on. Note that some of the figure scripts can be run without running any of the simulations/ model fitting defined above as the output has already been saved into the subdirectory `flu-long-term-agent/figure_scipts/input_data/`, but many of the figure scipts can not be run as they depend on outputs that are too large to host on Github. The figure scipts are: 
 1. `baseline_graphs.R`
-2. `baseline_high_graphs.R`
-3. `baseline_low_graphs.R`
-4. `example_simulation.R`
-5. `immunity_methods_figure.R`
-6. `longterm_immunity_graphs.R`
-7. `parameter_selection.R`
-8. `waning_immunity_graphs.R`
+2. `baseline_graphs_DEMO.R`
+3. `baseline_high_graphs.R`
+4. `baseline_low_graphs.R`
+5. `example_simulation.R`
+6. `immunity_methods_figure.R`
+7. `longterm_immunity_graphs.R`
+8. `parameter_selection.R`
+9. `waning_immunity_graphs.R`
 
 # System Requirements
 ## Hardware requirements
