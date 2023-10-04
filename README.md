@@ -39,7 +39,7 @@ The simulations as performed in `main.py` take approximately 1 hour to complete 
 The code does not rely on any specific operating system and only requires 
 
 ### Python Dependencies
-The code was implemented using `Python 3.11`.
+The Python code was implemented using `Python 3.11`.
 
 The python scripts have the following dependencies:
 ```
