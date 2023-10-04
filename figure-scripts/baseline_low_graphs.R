@@ -1,11 +1,8 @@
 # Set location
 setwd('/flu-long-term-agent/figure_scripts')
 
-# Load plotting functions
+# Load plotting functions and packages
 source('plot_functions.R')
-
-library(ggdist)
-library(dplyr)
 
 # Specify simulation parameters (obtained from main.py)
 pop_size <- 80000 
