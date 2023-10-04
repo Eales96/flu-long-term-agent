@@ -74,7 +74,7 @@ source venv/bin/activate to enter the virtual environment
 pip install -r requirements.txt (sets up virtual environment for running the python scipts)
 ```
 
-R packages can be installed by running the following in the R console:
+Specific versions of R packages can be installed by running the following in the R console:
 ```
 install.packages("remotes") (if you do not have the package remotes already)
 library(remotes)
