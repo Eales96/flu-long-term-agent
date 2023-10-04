@@ -11,7 +11,7 @@ The code required to produce the figures in the publication are then included in
 ## Python simulations (main model)
 There are three python scripts that simulate the long-term dynamics of influenza. 
 1. `main.py` runs 160 year simulations of influenza dynamics recording the yearly attack rate by age. 256 simulations are run for each set of parameters provided. The code runs simulations in parallel so that a single simulation is run on each available core simultaneously (the more cores available the faster the code will run). To speed up code for testing you can change the global parameters at the top of the script. Reducing the number of simulations, population size, or number of years will all speed up the run time of the scipt. The ouput will appear in `flu-long-term-agent/output` and should be moved to `flu-long-term-agent\figure-scripts\input-data\AttackRates\` for plotting.
-2. `demo.py` runs 8 160 year simulations for a population of 20000 for the baseline parameters and offers a convenient way to observe the code and its output in a time efficient manner.
+2. `demo.py` runs 8 160 year simulations for a population of 20000 for the baseline parameters only and offers a convenient way to observe the code and its output in a time efficient manner. This should produce a single csv file. There should be 80 columns for the 80 possible ages. The first 160 rows are the 160 years of the first simulation, the next 160 rows are the 160 years of the second simulation, and so on.
 3. `parameter-selection.py` runs 40 year simulations of influenza dynamics recording the yearly attack rate and the week of peak incidence. For each set of parameters 20 simulations are run. Parameter values are varied for the seasonality and average contact parameter (beta0 and beta1) across a 2d grid. The ouput (`parameter_selection_ar.csv` and `parameter_selection_pk_wk.csv`)  will appear in `flu-long-term-agent/output` and should be moved to `flu-long-term-agent\figure-scripts\input-data\ParameterSelection\` for plotting.
 4. `detailed_sim_20_years.py` runs a single simulation of influenza dynamics for 20 years recording the daily attack rate by strain, and recording the strains present in each year of the model. The code will output 20 csv files with the incidence curves for each year and 2 csv files with the mean strain coordinates and raw strain coordnates. The output is small and is available in `flu-long-term-agent\figure-scripts\input-data\StrainCurves\`
 
@@ -21,15 +21,14 @@ The code required to fit to the global drift model to the antigenic data avaialb
 ## Figure scripts
 There are multiple figure scripts located in `flu-long-term-agent/figure_scipts/` which are used to convert the raw output from the python simulations, and the global drift model fit posterior, into figures and values (e.g. correlations, mean yearly attack rate, etc). The figure scipts have some functions defined in `flu-long-term-agent/plot_functions.R` on which they rely on. Note that some of the figure scripts can be run without running any of the simulations/ model fitting defined above as the output has already been saved into the subdirectory `flu-long-term-agent/figure_scipts/input_data/`, but many of the figure scipts can not be run as they depend on outputs that are too large to host on Github. The figure scipts are: 
 1. `baseline_graphs.R` produces Fig.3, Fig.4, SFig.4, SFig.5 and SFig.8
-2. `baseline_graphs_DEMO.R`
-3. `baseline_high_graphs.R` produces SFig. 6
-4. `baseline_low_graphs.R` produces SFig. 7
-5. `example_simulation.R` produces Fig.2
-6. `immunity_methods_figure.R` produces Fig.1, SFig.1, SFig.2 and SFig.3
-7. `longterm_immunity_graphs.R` produces SFig.10
-8. `parameter_selection.R` produces SFig.11
-9. `waning_immunity_graphs.R` produces Fig.6
-10. `antigenic_seniority_graphs.R` produces Fig.5 and SFig.9
+2. `baseline_high_graphs.R` produces SFig. 6
+3. `baseline_low_graphs.R` produces SFig. 7
+4. `example_simulation.R` produces Fig.2
+5. `immunity_methods_figure.R` produces Fig.1, SFig.1, SFig.2 and SFig.3
+6. `longterm_immunity_graphs.R` produces SFig.10
+7. `parameter_selection.R` produces SFig.11
+8. `waning_immunity_graphs.R` produces Fig.6
+9. `antigenic_seniority_graphs.R` produces Fig.5 and SFig.9
 
 # System Requirements
 ## Hardware requirements
@@ -37,7 +36,7 @@ The simulations as performed in `main.py` take approximately 1 hour to complete 
 
 ## Software requirements
 ### OS Requirements
-The code does not rely on any specific operating system and only requires 
+The code does not rely on any specific operating system and only requires that R and Python be installed (see versions and dependencies below).
 
 ### Python Dependencies
 The Python code was implemented using `Python 3.11`.
