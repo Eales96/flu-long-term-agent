@@ -6,13 +6,11 @@ library(grid)
 library(cowplot)
 library(gridExtra)
 # Set location
-setwd('C:/Users/EALESO/PycharmProjects/pythonProject/figure_scripts')
-
+setwd('/flu-long-term-agent/figure_scripts')
 
 #Read in the data and the posterior parameters from model
 post <- readRDS('input_data/posterior.rds')
 dat <- read.csv('input_data/antigenic_data.csv')
-
 
 lambda <- mean(post$lambda)
 theta <- mean(post$theta)
@@ -20,7 +18,6 @@ sigma <- mean(post$sigma)
 
 yr_1 <- min(dat$year)
 yr_n <- max(dat$year)
-
 
 mod_df <- data.frame()
 
@@ -38,7 +35,6 @@ for(i in seq_len(yr_n - yr_1+1)){
   
   mod_df <- rbind(mod_df, row_df)
 }
-
 
 
 mod_df$year <- as.factor(mod_df$year)
@@ -88,140 +84,6 @@ ggsave('figures/global_drift_model_fit.pdf', width=12, height=4)
 # Code for simulating and plotting genetic drift model
 #################################################################################################################
 set.seed(520)
-
-
-yr = factor(seq(1968, 2011, 1))
-mnx1 = c(0)
-mnx2 = c(0)
-mnx3 = c(0)
-mnx4 = c(0)
-
-mny1 = c(55)
-mny2 = c(25)
-mny3 = c(35)
-mny4 = c(10)
-for(i in seq_len(length(yr)-1)){
-  mnx1 = c(mnx1, mnx1[i]+rexp(1, rate=lambda))
-  mnx2 = c(mnx2, mnx2[i]+rexp(1, rate=lambda))
-  mnx3 = c(mnx3, mnx3[i]+rexp(1, rate=lambda))
-  mnx4 = c(mnx4, mnx4[i]+rexp(1, rate=lambda))
-  
-  mny1 = c(mny1, mny1[i]+rnorm(1,0, theta))
-  mny2 = c(mny2, mny2[i]+rnorm(1,0, theta))
-  mny3 = c(mny3, mny3[i]+rnorm(1,0, theta))
-  mny4 = c(mny4, mny4[i]+rnorm(1,0, theta))
-  
-  
-}
-
-mn_df1 <- data.frame(year=yr, mu_x = mnx1, mu_y = mny1)
-mn_df2 <- data.frame(year=yr, mu_x = mnx2, mu_y = mny2)
-mn_df3 <- data.frame(year=yr, mu_x = mnx3, mu_y = mny3)
-mn_df4 <- data.frame(year=yr, mu_x = mnx4, mu_y = mny4)
-
-sim1 = data.frame()
-sim2 = data.frame()
-sim3 = data.frame()
-sim4 = data.frame()
-
-
-for(i in seq_len(length(yr))){
-  
-  for(j in seq_len(10)){
-    
-    row_df1 <- data.frame(year = mn_df1$year[i],
-                          ag_x = mn_df1$mu_x[i] + rnorm(1,0, sigma),
-                          ag_y = mn_df1$mu_y[i] + rnorm(1,0, sigma))
-    row_df2 <- data.frame(year = mn_df2$year[i],
-                          ag_x = mn_df2$mu_x[i] + rnorm(1,0, sigma),
-                          ag_y = mn_df2$mu_y[i] + rnorm(1,0, sigma))
-    row_df3 <- data.frame(year = mn_df3$year[i],
-                          ag_x = mn_df3$mu_x[i] + rnorm(1,0, sigma),
-                          ag_y = mn_df3$mu_y[i] + rnorm(1,0, sigma))
-    row_df4 <- data.frame(year = mn_df4$year[i],
-                          ag_x = mn_df4$mu_x[i] + rnorm(1,0, sigma),
-                          ag_y = mn_df4$mu_y[i] + rnorm(1,0, sigma))
-    
-    sim1 <- rbind(sim1, row_df1)
-    sim2 <- rbind(sim2, row_df2)
-    sim3 <- rbind(sim3, row_df3)
-    sim4 <- rbind(sim4, row_df4)
-  }
-}
-
-sim1a <-sim1
-
-
-plt2<-ggplot()+
-  geom_point(data = sim1, aes(x= ag_x, y=ag_y, col=year))+
-  geom_point(data=mn_df1, aes(x= mu_x, y=mu_y, col=year), shape=4, size=2)+
-  geom_line(data=mn_df1, aes(x= mu_x, y=mu_y), col='grey')+
-  xlab("Antigenic dimension 1")+
-  ylab("Antigenic dimension 2")+
-  coord_cartesian(ylim=c(0, 60), xlim=c(0, 50))+
-  scale_color_manual(values = cols, levels(mn_df1$year))+
-  scale_y_continuous(minor_breaks=seq(-10,100,1), breaks=seq(0,100,10))+
-  scale_x_continuous(minor_breaks=seq(-2,50,1), breaks=seq(0,50,10))+
-  theme_bw()+
-  theme(legend.position = "none")
-
-plt2 <- plt2+
-  geom_point(data = sim2, aes(x= ag_x, y=ag_y, col=year))+
-  geom_point(data=mn_df2, aes(x= mu_x, y=mu_y, col=year), shape=4, size=2)+
-  geom_line(data=mn_df2, aes(x= mu_x, y=mu_y), col='grey')
-
-
-plt2 <- plt2+
-  geom_point(data = sim3, aes(x= ag_x, y=ag_y, col=year))+
-  geom_point(data=mn_df3, aes(x= mu_x, y=mu_y, col=year), shape=4, size=2)+
-  geom_line(data=mn_df3, aes(x= mu_x, y=mu_y), col='grey')
-
-plt2 <- plt2+
-  geom_point(data = sim4, aes(x= ag_x, y=ag_y, col=year))+
-  geom_point(data=mn_df4, aes(x= mu_x, y=mu_y, col=year), shape=4, size=2)+
-  geom_line(data=mn_df4, aes(x= mu_x, y=mu_y), col='grey')
-
-
-for(i in seq_len(nrow(sim1))){
-  print(i)
-  t_sim1 <- sim1[i,]
-  t_sim2 <- sim2[i,]
-  t_sim3 <- sim3[i,]
-  t_sim4 <- sim4[i,]
-  
-  t_mn1 <- mn_df1[mn_df1$year == t_sim1$year,]
-  t_mn2 <- mn_df2[mn_df2$year == t_sim2$year,]
-  t_mn3 <- mn_df3[mn_df3$year == t_sim3$year,]
-  t_mn4 <- mn_df4[mn_df4$year == t_sim4$year,]
-  
-  t_df1 <- rbind(data.frame(ag_x = t_sim1$ag_x, ag_y = t_sim1$ag_y, year=t_sim1$year),
-                 data.frame(ag_x = t_mn1$mu_x, ag_y = t_mn1$mu_y, year=t_mn1$year))
-  t_df2 <- rbind(data.frame(ag_x = t_sim2$ag_x, ag_y = t_sim2$ag_y, year=t_sim2$year),
-                 data.frame(ag_x = t_mn2$mu_x, ag_y = t_mn2$mu_y, year=t_mn2$year))
-  t_df3 <- rbind(data.frame(ag_x = t_sim3$ag_x, ag_y = t_sim3$ag_y, year=t_sim3$year),
-                 data.frame(ag_x = t_mn3$mu_x, ag_y = t_mn3$mu_y, year=t_mn3$year))
-  t_df4 <- rbind(data.frame(ag_x = t_sim4$ag_x, ag_y = t_sim4$ag_y, year=t_sim4$year),
-                 data.frame(ag_x = t_mn4$mu_x, ag_y = t_mn4$mu_y, year=t_mn4$year))
-  
-  plt2<-plt2+geom_line(data=t_df1, aes(x=ag_x, y=ag_y, col=year), linetype='dashed', alpha=0.9)
-  plt2<-plt2+geom_line(data=t_df2, aes(x=ag_x, y=ag_y, col=year), linetype='dashed', alpha=0.9)
-  plt2<-plt2+geom_line(data=t_df3, aes(x=ag_x, y=ag_y, col=year), linetype='dashed', alpha=0.9)
-  plt2<-plt2+geom_line(data=t_df4, aes(x=ag_x, y=ag_y, col=year), linetype='dashed', alpha=0.9)
-  
-}
-
-
-pdf("figures/global_drift_sim10.pdf", height = 12, width =10)
-plt2
-dev.off()
-
-
-
-#################################################################################################################
-# Code for simulating and plotting genetic drift model new attempt
-#################################################################################################################
-set.seed(520)
-
 
 yr = factor(seq(1968, 2011, 1))
 mnx1 = c(0)
@@ -369,11 +231,11 @@ for(i in seq_len(nrow(sim1))){
 library(cowplot)
 plt_grd <- plot_grid(plt2a, plt2b, plt2c, plt2d, nrow=2)
 
-ggsave("figures/global_drift_sim10NEW.pdf", height = 8, width =14)
+ggsave("figures/global_drift_sim10.pdf", height = 8, width =14)
 
 
 #################################################################################################################
-# Immunity titres
+# Plot antibody titre/immunity model
 ##################################################################################################################
 immunity <- function(x,centre, mu, sig){
   
@@ -502,8 +364,6 @@ plt4_alt<-ggplot(data=df)+
         panel.grid = element_blank())
 
 
-saveRDS(plt4_alt, 'FigureComponents/immunity_a.rds')
-
 x <- seq(0, 50, 0.1)
 lt_y1 <- immunity(x, 10 ,2.02, 0.130)
 lt_y2 <- immunity(x, 15 ,2.02, 0.130)
@@ -558,11 +418,6 @@ plt5_alt<-ggplot(data=df)+
         panel.grid = element_blank())
 
 
-
-
-saveRDS(plt5_alt, 'FigureComponents/immunity_b.rds')
-
-
 x = seq(-1, 8, 0.1)
 y = titre_immunity(x, alpha, beta)
 
@@ -573,8 +428,6 @@ plt6<-ggplot(data=df_im, aes(x=x, y=y))+
   xlab("Log-titre")+
   ylab("Protection")+
   coord_cartesian(xlim=c(0.25,8), ylim=c(0,1))
-
-saveRDS(plt6, 'FigureComponents/immunity_c.rds')
 
 im_a <- plt4_alt
 im_b <- plt5_alt
@@ -593,16 +446,10 @@ im_b <- im_b+labs(tag="B")+
 im_c <- im_c+labs(tag="C")+
   theme(plot.tag.position=c(0.01,0.95))
 
-
 im_grd<-plot_grid(im_b, im_c, nrow=1, rel_widths = c(2,1))
-
 im_abc <- plot_grid(im_a, im_grd, nrow=2)
+ggsave('figures/immunity_model.pdf', width=8.3, height=6)
 
-ggsave('figures/ExampleSimulation/immunity_model.pdf', width=8.3, height=6)
-
-
-
-################################################################################################################
 #################################################################################################################
 # 2d immunity
 ##################################################################################################################
@@ -611,21 +458,36 @@ sim1 <-sim1a
 sim1$ag_y <- sim1$ag_y-55
 infections <- c(1,47, 116, 162,208, 277, 346, 369, 415)
 
-saveRDS(sim1, 'FigureComponents/sim1.rds')
-
-
-####################################################################################################
-# 2D immunity panels
 sim1$strain <- seq(1,20,1)
 sim1$ag1 <- sim1$ag_x
 sim1$ag2 <- sim1$ag_y
 
 
+## Colours to show different years
+col0 <- rev(colorRampPalette(brewer.pal(9, 'Blues')[3:9])(N_strains))
+col1 <- rev(colorRampPalette(brewer.pal(9, 'Oranges')[3:9])(N_strains))
+col2 <- rev(colorRampPalette(brewer.pal(9, 'Purples')[3:9])(N_strains))
+col3 <- rev(colorRampPalette(brewer.pal(9, 'Greens')[3:9])(N_strains))
+col4 <- rev(colorRampPalette(brewer.pal(9, 'Reds')[3:9])(N_strains))
+col5 <- rev(colorRampPalette(c('paleturquoise1','turquoise1','turquoise4'))(N_strains))
+col6 <- rev(colorRampPalette(c('khaki1','gold1','darkgoldenrod4'))(N_strains))
+col7 <- rev(colorRampPalette(c('pink1','deeppink1','deeppink4'))(N_strains))
+
+hcol0 <- col0[N_strains/2]
+hcol1 <- col1[N_strains/2]
+hcol2 <- col2[N_strains/2]
+hcol3 <- col3[N_strains/2]
+hcol4 <- col4[N_strains/2]
+hcol5 <- col5[N_strains/2]
+hcol6 <- col6[N_strains/2]
+hcol7 <- col7[N_strains/2]
+
+hcol <- c(hcol0, hcol1, hcol2, hcol3, hcol4 , hcol5, hcol6, hcol7)
 overall_cols <- c(hcol, hcol, hcol, hcol, hcol, hcol, hcol, hcol, hcol)[1:44]
 
 
-
 df_res <- sim1
+# Some infections set manually to plot 2d immune landscape
 infections <- c(1,47, 116, 162,208, 277, 346, 369, 415)
 df_inf <- df_res[infections,]
 im2d_A <- ggplot()+
@@ -778,5 +640,5 @@ sim_grd<-ggdraw()+draw_grob(sim_grd)+
   draw_grob(leg2,x=0.39, y=-0.07)
 
 
-ggsave('figures/ExampleSimulation/ExampleImmunity.pdf',sim_grd, width=8.3, height=8, units = 'in')
+ggsave('figures/ExampleImmunity.pdf',sim_grd, width=8.3, height=8, units = 'in')
 
