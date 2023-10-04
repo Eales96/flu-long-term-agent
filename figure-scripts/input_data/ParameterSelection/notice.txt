@@ -1,0 +1,2 @@
+Run parameter_selection.py to produce the files 'parameter_selection_ar.csv' and 'parameter_selection_pk_wk.csv'.
+The file will be appear in flu-long-term-agent/output directory and will need to be moved to this directory before running the figure scipt 'parameter_selection.R'
