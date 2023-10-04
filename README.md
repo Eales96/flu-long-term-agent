@@ -4,7 +4,7 @@ This github repository includes the code supporting the article ['How immunity s
 # Documenation
 The main python scripts that simulate the long-term dynamics of influenza are included in the main directory `flu-long-term-agent` with the source code describing the agent based model included in the sub-directory `flu-long-term-agent/src`.
 
-The code required to fit to the antigenic data avaialble from [Bedford et al 2014](https://elifesciences.org/articles/01914) to parameterise the global drift model is included in the subdirectory `flu-long-term-agent/XXXXXXXXXXXXXX`. The parameter values are already in the main python scripts and so do not need to be updated before running.
+The code required to fit to the antigenic data avaialble from [Bedford et al 2014](https://elifesciences.org/articles/01914) to parameterise the global drift model is included in the subdirectory `flu-long-term-agent/global-drift-model`. The parameter values are already in the main python scripts and so do not need to be updated before running.
 
 The code required to produce the figures in the publication are then included in the sub-directory `flu-long-term-agent/figure-scripts`. The figure scripts rely on the output of the three python scripts in the main directory.
 
