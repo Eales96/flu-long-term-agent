@@ -464,18 +464,6 @@ test <- test[test$yrs>0,]
 
 test <- test[test$birth_year<81,]
 
-#test[test$age_grp == "Early childhood infections (0-4 years)",]$ar <- test[test$age_grp == "Early childhood infections (0-4 years)",]$ar/5
-#test[test$age_grp == "School age infections (5-17 years)",]$ar <- test[test$age_grp == "School age infections (5-17 years)",]$ar/13
-#test[test$age_grp == "Working age infections (18-64 years)",]$ar <- test[test$age_grp == "Working age infections (18-64 years)",]$ar/47
-#test[test$age_grp == "Old age infections (65-79 years)",]$ar <- test[test$age_grp == "Old age infections (65-79 years)",]$ar/15
-#test[test$age_grp == "Total infections",]$ar <- test[test$age_grp == "Total infections",]$ar/80
-
-#test[test$age_grp == "Early childhood infections (0-4 years)",]$sem_ar <- test[test$age_grp == "Early childhood infections (0-4 years)",]$sem_ar/5
-#test[test$age_grp == "School age infections (5-17 years)",]$sem_ar <- test[test$age_grp == "School age infections (5-17 years)",]$sem_ar/13
-#test[test$age_grp == "Working age infections (18-64 years)",]$sem_ar <- test[test$age_grp == "Working age infections (18-64 years)",]$sem_ar/47
-#test[test$age_grp == "Old age infections (65-79 years)",]$sem_ar <- test[test$age_grp == "Old age infections (65-79 years)",]$sem_ar/15
-#test[test$age_grp == "Total infections",]$sem_ar <- test[test$age_grp == "Total infections",]$sem_ar/80
-
 test$age_grp <- factor(test$age_grp, levels = c("Early childhood infections (0-4 years)",
                                                 "School age infections (5-17 years)",
                                                 "Working age infections (18-64 years)",
@@ -554,95 +542,6 @@ ggsave('figures/CohortGraph_Figure4.pdf', width=14, height=8)
 #####################################################################################################################################
 # Auto-correlation structure
 #####################################################################################################################################
-fishers_z<- function(r){
-  log((1+r) / (1-r)) / 2
-  
-}
-
-inv_fishers_z <- function(z){
-  
-  (exp(2*z)-1)/(exp(2*z)+1)
-}
-correlation_between_adjacent_alternative <- function(df, pop_size, N_iter, N_years, yr_dif){
-  
-  cor_df <- data.frame()
-  for(i in seq_len(N_iter)){
-    tmp <- df[df$sim==(i-1),]
-    
-    tmp$AR2 <- -1.0
-    tmp$AR2[1:(nrow(tmp)-yr_dif)] <- tmp$AR[(1+yr_dif):nrow(tmp)]
-    cor_df <- rbind(cor_df, tmp[tmp$AR2!=-1.0,])
-  }
-  
-  cor_df <- cor_df[cor_df$TSI>20,]
-  comp_df <- data.frame()
-  for(i in seq_len(N_iter)){
-    ct <- cor.test(cor_df[cor_df$sim==(i-1),]$AR, cor_df[cor_df$sim==(i-1),]$AR2)
-    #sd = abs(ct$conf.int[2]-ct$conf.int[1])/(3.92)
-    row_df <- data.frame(cor = ct$estimate,
-                         upr=ct$conf.int[2],
-                         lwr=ct$conf.int[1])
-    
-    comp_df <- rbind(comp_df, row_df)
-  }
-  
-  
-  return(comp_df)
-  
-}
-cor_alternative_analysis <- function(dat, pop_size, N_iter, N_years, label){
-  
-  dfnew <- data.frame()
-  for(i in seq_len(nrow(dat))){
-    
-    AR = sum(dat[i,])/pop_size
-    TSI = (i-1) %% N_years +1
-    sim = (i-1) %/% N_years
-    
-    
-    row_df <- data.frame(AR = AR,
-                         TSI = TSI,
-                         sim = sim)
-    dfnew <- rbind(dfnew, row_df)
-  }
-  
-  
-  df <- data.frame()
-  
-  for(i in seq_len(30)){
-    
-    comp_df <- correlation_between_adjacent_alternative(dfnew, pop_size, N_iter, N_years, yr_dif =i)
-    comp_df$new_mn <- fishers_z(comp_df$cor)
-    comp_df$new_lwr <- fishers_z(comp_df$lwr)
-    comp_df$new_upr <- fishers_z(comp_df$upr)
-    comp_df$new_sd <- abs(comp_df$new_lwr- comp_df$new_upr)/3.92
-    
-    cor <- mean(comp_df$new_mn)
-    cor_sd <- sqrt(sum(comp_df$new_sd**2))/N_iter
-    
-    
-    
-    rndm <- rnorm(10000, cor, cor_sd)
-    
-    
-    row_df <- data.frame(cor = inv_fishers_z(cor),
-                         cor_lwr = inv_fishers_z(cor-1.96*cor_sd),
-                         cor_upr = inv_fishers_z(cor+1.96*cor_sd),
-                         p_val = length(inv_fishers_z(rndm[rndm>0]))/10000,
-                         yr_dif = i,
-                         label = label)
-    
-    df <- rbind(df, row_df)
-    
-    
-  }
-  
-  return(df)
-  
-  
-  
-  
-}
 
 
 acs <- autocorrelation_over_time(dat1, pop_size, N_iter, N_years)
