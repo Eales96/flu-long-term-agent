@@ -1,18 +1,21 @@
 # Set location
-setwd('C:/Users/EALESO/PycharmProjects/pythonProject/figure_scripts')
+setwd('/flu-long-term-agent/figure_scripts')
 
 # Load plotting functions
 source('plot_functions.R')
 
+# Load packages
+library(ggdist)
+library(dplyr)
+library(ggridges)
 
 # Specify simulation parameters (obtained from main.py)
-pop_size <- 80000 #160000
-N_years <- 160 #160
-N_iter <- 256 #128
+pop_size <- 80000 
+N_years <- 160
+N_iter <- 256 
 
 
 #Load in data
-
 dat1 <- read.table('input_data/AttackRates/baseline.csv', header=F, sep=',')
 
 
@@ -155,22 +158,6 @@ plt1D<-ggplot()+
   theme(legend.position = c(0.27,0.8),
         legend.background = element_rect(colour = 'black'))
 
-
-# Plot of attack rate by age (yearly) by decade with variance shown
-plt1E<-ggplot()+
-  geom_line(data=age_df, aes(x=age, y=mn_AR, ymin=mn_AR-sem_AR, ymax=mn_AR+sem_AR, group=tsi, color=tsi))+
-  geom_ribbon(data=age_df, aes(x=age, y=mn_AR, ymin=mn_AR-1.96*sem_AR, ymax=mn_AR+1.96*sem_AR, group=tsi, fill=tsi),alpha=0.5)+
-  geom_errorbar(data=age_df, aes(x=age, y=mn_AR, ymin=lwr_AR, ymax=upr_AR, group=tsi, color=tsi), alpha=0.2, width=0.0)+
-  facet_wrap(.~tsi,nrow=2)+
-  scale_color_brewer(palette='Dark2')+
-  scale_fill_brewer(palette="Dark2")+
-  xlab("Age (years)")+
-  ylab("Average annual attack rate")+
-  theme_bw()+
-  theme(legend.position = "none")
-
-
-
 plt1A<-plt1A+labs(tag="A")+
   theme(plot.tag.position=c(0.005,0.95))
 plt1B<-plt1B+labs(tag="B")+
@@ -183,47 +170,17 @@ plt1D<-plt1D+labs(tag="D")+
   theme(plot.tag.position=c(0.02,1),
         legend.text = element_text(size=8),
         legend.title = element_text(size=8))
-#plt1E<-plt1E+labs(tag="E")+
-#  theme(plot.tag.position=c(0.02,0.95))
 
 
 mid_row <- plot_grid(plt1B, plt1C, plt1D, nrow=1, rel_widths = c(1,1,1))
-
 plt_final1 <- plot_grid(plt1A, mid_row, nrow=2, rel_heights = c(1,1.2))
 
-ggsave('figures/Baseline/Figure3.pdf', width=12, height=8.5)
+ggsave('figures/Figure3.pdf', width=12, height=8.5)
 
-poster1 <- plot_grid(plt1A, plt1B, nrow=1, rel_widths=c(1,0.5))
-ggsave('figures/Baseline/poster_version1.pdf', width=10, height=5)
-
-poster2 <- plot_grid(plt1C, plt1D, nrow=1, rel_widths=c(1,1))
-ggsave('figures/Baseline/poster_version1.pdf', width=10, height=5)
-
-
-
-plt1A<-plt1A+labs(tag="A")+
-  theme(plot.tag.position=c(0.02,0.95))
-plt1B<-plt1B+labs(tag="B")+
-  theme(plot.tag.position=c(0.02,0.95))
-plt1C<-plt1C+labs(tag="B")+
-  theme(plot.tag.position=c(0.02,0.95))
-plt1D<-plt1D+labs(tag="C")+
-  theme(plot.tag.position=c(0.02,0.95))
-bot_row <- plot_grid(plt1C, plt1D, nrow=1, rel_widths=c(1,1))
-plot_grid(plt1A, bot_row, nrow=2, rel_heights=c(1,1))
-ggsave('figures/Baseline/poster_version1.pdf', width=9.2, height=9.2)
-
-
-                 
-
-plt1E
-ggsave('figures/Baseline/AttackRateByAgeDecadeSup.pdf', width=10, height=6)
 
 ##########################################################################################################################################
 ### Variation in attack rates figure/s
 ###########################################################################################################################################
-library(ggdist)
-library(dplyr)
 
 df <- AR1[[1]]
 df$TSI <- df$TSI-1
@@ -245,7 +202,6 @@ df <- df[df$TSI<=160,]
 df$TSI <- df$TSI-1
 df <- group_by(df, TSI)
 df <- point_interval(df, AR, .width = c(.5, .8, .95), .point = mean)
-
 
 
 plt2A <- ggplot() +
@@ -325,8 +281,6 @@ levels(df$dec) <- list("0-9" = "0",
                        "140-149" = "14",
                        "150-159" = "15")
 
-
-library(ggridges)
 plt2C <- ggplot(df, aes(x = AR, y = dec)) +
   geom_density_ridges(stat = 'binline', binwidth=0.01) +
   theme_ridges() + 
@@ -353,12 +307,9 @@ plt2C<-plt2C+labs(tag="D")+
 
 
 
-
 bot_row <- plot_grid(plt2B, plt2C, nrow=1, rel_widths = c(1,1.5))
-
 plt_final2 <- plot_grid(plt2D, plt2A, bot_row, nrow=3, rel_heights = c(1, 1,1.5))
-
-ggsave('figures/Baseline/Variation_sup.pdf', width=11, height=9)
+ggsave('figures/Variation_sup.pdf', width=11, height=9)
 
 #########################################################################################################################################################
 # Mean dynamics by cohort figures
@@ -395,8 +346,6 @@ levels(dbc1$age_grp) <- list("Ages 0-4 years" = "1",
 
 dbc1 <- dbc1[dbc1$birth_year<81,]
 dbc1 <- dbc1[dbc1$yrs>4,]
-#dbc1$ar <- dbc1$ar/5
-#dbc1$sem_ar <- dbc1$sem_ar/5
 
 data_min1 <- aggregate(ar ~ age_grp,             
                        data = dbc1,
@@ -442,39 +391,6 @@ dbc1_mn3 <- rbind(dbc1[dbc1$age_grp=="Ages 0-4 years",][3,],
 
 
 ############################### For all age-groups #############################
-
-
-
-ggplot()+
-  scale_x_continuous(breaks=c(-80,-60,-40,-20,0,20,40,60,80), labels = c(-80,-60,-40,-20,"0\nPandemic\nyear",20,40,60,80))+
-  xlab("Birth year")+
-  ylab("Expected number of infections whilst in age-group")+
-  #geom_vline(aes(xintercept = birth_year), data=dbc1_mn1, linetype='dashed', col='red', alpha=0.1)+
-  #geom_vline(aes(xintercept = birth_year), data=dbc1_mn3, linetype='dashed', col='blue', alpha=0.1)+
-  geom_hline(aes(yintercept = ar), data=dbc1_mn1, linetype='dashed', col='red')+
-  geom_hline(aes(yintercept = min), data=dbc1, linetype='dashed', col='blue')+
-  geom_line(data=dbc1, aes(x=birth_year, y=ar))+
-  geom_ribbon(data=dbc1, aes(x=birth_year, y=ar, ymin=ar-1.96*sem_ar, ymax=ar+1.96*sem_ar), alpha=0.3)+
-  facet_wrap(.~age_grp, nrow=4, scales = 'free_y')+
-  coord_cartesian(xlim=c(-80,80))+
-  theme_bw()
-ggsave('figures/Baseline/CohortByAge.pdf', width=12, height=8)
-
-
-ggplot()+
-  scale_x_continuous(breaks=c(-80,-60,-40,-20,0,20,40,60,80), labels = c(-80,-60,-40,-20,"0\nPandemic\nyear",20,40,60,80))+
-  scale_y_continuous(breaks=c(1.0,1.1,1.2,1.3,1.4,1.5,1.6))+
-  xlab("Birth year")+
-  ylab("Expected number of infections whilst in age-group")+
-  geom_hline(aes(yintercept = ar/min), data=dbc1_mn1, linetype='dashed', col='red')+
-  geom_line(data=dbc1, aes(x=birth_year, y=ar/min))+
-  geom_ribbon(data=dbc1, aes(x=birth_year, y=ar/min, ymin=(ar-1.96*sem_ar)/min, ymax=(ar+1.96*sem_ar)/min), alpha=0.3)+
-  facet_wrap(.~age_grp, nrow=4, scales = 'fixed')+
-  geom_hline(yintercept = 1.0, linetype="dashed", col='blue')+
-  coord_cartesian(xlim=c(-80,80))+
-  theme_bw()
-ggsave('figures/Baseline/CohortByAgeScaled.pdf', width=14, height=10)
-
 
 cohort1<-ggplot()+
   scale_x_continuous(breaks=c(-80,-60,-40,-20,0,20,40,60,80), labels = c(-80,-60,-40,-20,"0\nPandemic\nyear",20,40,60,80))+
@@ -533,7 +449,7 @@ cohort2<-cohort2+labs(tag="B")+
   theme(plot.tag.position=c(0.005,0.98))
 
 plot_grid(cohort1, cohort2, nrow=1, rel_widths=c(1.5,1))
-ggsave('figures/Baseline/CohortSup.pdf', width=16, height=8)
+ggsave('figures/CohortSup.pdf', width=16, height=8)
 
 
 ############################### For a few age groups #############################
@@ -631,8 +547,7 @@ plt3B <- ggplot()+
         legend.title = element_blank())
 
 plot_grid(plt3A, plt3B, nrow=1, rel_widths = c(0.5,1))
-
-ggsave('figures/Baseline/CohortGraph_Figure4.pdf', width=14, height=8)
+ggsave('figures/CohortGraph_Figure4.pdf', width=14, height=8)
 
 
 
@@ -730,13 +645,7 @@ cor_alternative_analysis <- function(dat, pop_size, N_iter, N_years, label){
 }
 
 
-
-
-
-
 acs <- autocorrelation_over_time(dat1, pop_size, N_iter, N_years)
-#corW <- cor_analysis(dat1, pop_size, N_iter, N_years, "1.27 (empirical estimate)")
-#corW <- cor_alternative_analysis(dat1, pop_size, N_iter, N_years, "1.27 (empirical estimate)")
 
 new_analytics <- function(acs, label){
   
@@ -799,9 +708,6 @@ Cplt1<-ggplot()+
   scale_x_continuous(breaks=seq(0,160,20), minor_breaks = seq(0,160,20) )+
   theme(legend.position = c(0.7,0.25),
         legend.background = element_rect(color='black'))
-
-ggsave('figures/Baseline/Autocorrelation.pdf', width=14, height=7)
-
 
 Cplt2 <-ggplot()+
   geom_line(data=corW, aes(x=yr_dif, y=cor), alpha=0.6)+
