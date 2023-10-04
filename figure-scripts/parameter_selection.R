@@ -3,8 +3,6 @@ setwd('/flu-long-term-agent/figure_scripts')
 
 # Load plotting functions
 source('plot_functions.R')
-library(mgcv)
-library(metR)
 
 # Specify simulation parameters (obtained from main.py)
 pop_size <- 80000 
