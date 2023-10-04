@@ -6,7 +6,7 @@ library(conmat)
 library(tidyr)
 
 # Set location
-setwd('C:/Users/EALESO/PycharmProjects/pythonProject/figure_scripts')
+setwd('flu-long-term-agent/figure_scripts')
 
 
 attack_rate_over_time <- function(dat, pop_size, N_years, N_iter){
