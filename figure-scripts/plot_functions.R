@@ -4,6 +4,9 @@ library(grid)
 library(cowplot)
 library(conmat)
 library(tidyr)
+library(ggdist)
+library(dplyr)
+library(ggridges)
 
 # Set location
 setwd('flu-long-term-agent/figure_scripts')
