@@ -64,9 +64,21 @@ These are also listed in requirments.txt and can be installed as shown below in 
 ### R Dependencies
 The R code was implemented in `R version 4.2.3`.
 
-The scipts written in R have the following dependencies:
+The scipts written in R have the following dependencies (version given is the version the code was run with):
 ```
-ggplot2 version X.X.X
+ggplot2 version 3.4.2
+RColorBrewer version 1.1.3
+ggrepel version 0.9.3
+grid version 4.2.3
+gridExtra version 2.3
+cowplot version 1.1.1
+conmat version 0.0.2.9000
+tidyr version 1.3.0
+ggdist version 3.2.1
+dplyr version 1.1.2
+ggridges version 0.5.4
+mgcv version 1.8.42
+metR version 0.14.0
 rstan version 2.21.3
 ```
 
