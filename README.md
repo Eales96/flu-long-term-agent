@@ -74,6 +74,12 @@ source venv/bin/activate to enter the virtual environment
 pip install -r requirements.txt (sets up virtual environment for running the python scipts)
 ```
 
+R packages can be installed by running the following in the R console:
+```
+install.packages("remotes") (if you do not have the package remotes already)
+library(remotes)
+install_version("PACKAGE_NAME", "PACKAGE_VERSION") (repeat for any packages needed)
+```
 Fitting the global drift model in `flu-long-term-agent/global-drift-model/main.R` requires the package `Rstan`. For full details on the installation of RStan please refer to the [RStan Getting Started GitHub](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started).
 
 
