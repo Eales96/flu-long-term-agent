@@ -24,8 +24,8 @@ There are multiple figure scripts located in `flu-long-term-agent/figure_scipts/
 2. `baseline_graphs_DEMO.R`
 3. `baseline_high_graphs.R` produces SFig. 6
 4. `baseline_low_graphs.R` produces SFig. 7
-5. `example_simulation.R`
-6. `immunity_methods_figure.R`
+5. `example_simulation.R` produces Fig.2
+6. `immunity_methods_figure.R` produces Fig.1, SFig.1, SFig.2 and SFig.3
 7. `longterm_immunity_graphs.R` produces SFig.10
 8. `parameter_selection.R` produces SFig.11
 9. `waning_immunity_graphs.R` produces Fig.6
