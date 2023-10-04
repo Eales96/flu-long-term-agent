@@ -79,7 +79,7 @@ pip install -r requirements.txt (sets up virtual environment for running the pyt
 
 Specific versions of R packages can be installed by running the following in the R console:
 ```
-install.packages("remotes") (if you do not have the package remotes already)
+install.packages("remotes") (if you do not have the package remotes installed already)
 library(remotes)
 install_version("PACKAGE_NAME", "PACKAGE_VERSION") (repeat for any packages needed)
 ```
