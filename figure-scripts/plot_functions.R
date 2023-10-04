@@ -7,6 +7,8 @@ library(tidyr)
 library(ggdist)
 library(dplyr)
 library(ggridges)
+library(mgcv)
+library(metR)
 
 # Set location
 setwd('flu-long-term-agent/figure_scripts')
