@@ -1,7 +1,7 @@
 # Set location
 setwd('/flu-long-term-agent/figure_scripts')
 
-# Load plotting functions
+# Load plotting functions and packages
 source('plot_functions.R')
 
 
