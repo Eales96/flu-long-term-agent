@@ -60,9 +60,6 @@ These are also listed in requirments.txt and can be installed as shown below in 
 ### R Dependencies
 The figure scipts written in R have the following dependencies:
 
-### RStan
-Fitting the global drift model in `flu-long-term-agent/global-drift-model/main.R` requires the package `Rstan`. 
-
 # Installation Guide:
 ### Install from Github
 ```
