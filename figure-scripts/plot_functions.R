@@ -787,3 +787,40 @@ cor_alternative_analysis <- function(dat, pop_size, N_iter, N_years, label){
 
 
 
+new_analytics <- function(acs, label){
+  
+  cor_df <- data.frame()
+  for(i in seq_len(length(unique(acs$dif)))){
+    comp_df <- acs[acs$dif==i & acs$year>20 & acs$year<(161-i),]
+    print(i)
+    
+    
+    comp_df$new_mn <- fishers_z(comp_df$cor)
+    comp_df$new_lwr <- fishers_z(comp_df$cor_lwr)
+    comp_df$new_upr <- fishers_z(comp_df$cor_upr)
+    comp_df$new_sd <- abs(comp_df$new_lwr- comp_df$new_upr)/3.92
+    
+    cor <- mean(comp_df$new_mn)
+    cor_sd <- sqrt(sum(comp_df$new_sd**2))/nrow(comp_df)
+    
+    
+    
+    rndm <- rnorm(10000, cor, cor_sd)
+    
+    
+    row_df <- data.frame(cor = inv_fishers_z(cor),
+                         cor_lwr = inv_fishers_z(cor-1.96*cor_sd),
+                         cor_upr = inv_fishers_z(cor+1.96*cor_sd),
+                         p_val = length(inv_fishers_z(rndm[rndm>0]))/10000,
+                         yr_dif = i,
+                         label = label)
+    
+    cor_df<-rbind(cor_df, row_df)
+    
+    
+  }
+  
+  return(cor_df)
+  
+}
+
