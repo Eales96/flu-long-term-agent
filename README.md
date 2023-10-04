@@ -67,6 +67,7 @@ The R code was implemented in `R version 4.2.3`.
 The scipts written in R have the following dependencies:
 ```
 ggplot2 version X.X.X
+rstan version 2.21.3
 ```
 
 # Installation Guide:
