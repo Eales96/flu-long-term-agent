@@ -37,7 +37,9 @@ The simulations as performed in `main.py` take approximately 1 hour to complete 
 ## Software requirements
 ### OS Requirements
 The code does not rely on any specific operating system and only requires that R and Python be installed (see versions and dependencies below).
-
+The code has been tested on the following systems:
++ Windows 10 21H2
++ Linux: Ubuntu 20.04
 ### Python Dependencies
 The Python code was implemented using `Python 3.11`.
 
