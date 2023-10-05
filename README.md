@@ -94,6 +94,7 @@ virtualenv venv to create your new environment (called 'venv' here)
 source venv/bin/activate to enter the virtual environment
 pip install -r requirements.txt (sets up virtual environment for running the python scipts)
 ```
+The above installation should take no longer than 10 minutes. 
 
 Specific versions of R packages can be installed by running the following in the R console:
 ```
