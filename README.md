@@ -105,3 +105,4 @@ Fitting the global drift model in `flu-long-term-agent/global-drift-model/drift_
 
 
 # License
+This project is covered under the **Apache 2.0 License**.
